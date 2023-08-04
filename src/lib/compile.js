@@ -148,7 +148,7 @@ const compileRetina = async (files, options) => {
     })),
   };
 
-  Promise.all([
+  await Promise.all([
     writeFileR(target.image, results[0].image, 'binary'),
     writeFileR(retina.targetImage, results[1].image, 'binary'),
     writeCss(target.css, spritesheetTemplatesData),

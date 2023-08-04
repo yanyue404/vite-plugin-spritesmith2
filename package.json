@@ -1,5 +1,5 @@
 {
-  "name": "vite-plugin-spritesmith",
+  "name": "vite-plugin-spritesmith2",
   "version": "0.1.0",
   "description": "vite plugin that converts set of images into sprites",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/evont/vite-plugin-spritesmith.git"
+    "url": "git+https://github.com/yanyue404/vite-plugin-spritesmith2.git"
   },
   "keywords": [
     "rollup",
