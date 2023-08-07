@@ -1,6 +1,6 @@
-# vite-plugin-spritesmith ![npm](https://img.shields.io/npm/v/vite-plugin-spritesmith)
+# vite-plugin-spritesmith2 ![npm](https://img.shields.io/npm/v/vite-plugin-spritesmith2)
 
-[![NPM](https://nodei.co/npm/vite-plugin-spritesmith.png)](https://nodei.co/npm/vite-plugin-spritesmith/)
+[![NPM](https://nodei.co/npm/vite-plugin-spritesmith2.png)](https://nodei.co/npm/vite-plugin-spritesmith2/)
 
 A Vite plugin that converts a set of images into a spritesheet and SASS/LESS/Stylus mixins, using
 [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates)
@@ -9,9 +9,9 @@ A Vite plugin that converts a set of images into a spritesheet and SASS/LESS/Sty
 
 ```bash
 # use yarn (recommend)
-yarn add -D vite-plugin-spritesmith
+yarn add -D vite-plugin-spritesmith2
 # or use npm
-npm install --save-dev vite-plugin-spritesmith
+npm install --save-dev vite-plugin-spritesmith2
 ```
 
 
@@ -38,7 +38,7 @@ Then you need to instantiate the plugin in the vite config like this:
 
 ```javascript
 import { defineConfig } from 'vite';
-import Spritesmith from '@vitejs/plugin-spritesmith';
+import Spritesmith from '@vitejs/plugin-spritesmith2';
 export default defineConfig({
   plugins: [
     Spritesmith({
