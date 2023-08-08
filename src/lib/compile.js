@@ -41,20 +41,24 @@ const spriteSheetFormat = (spritesmithResult, options) => {
 
 const compileNormal = (files, options) => {
   const { target } = options;
-  spritesmith.run(
-    _.merge({}, { src: files }, options.spritesmithOptions),
-    (err, result) => {
-      if (err) {
-        throw err;
+  return new Promise(resolve => {
+    spritesmith.run(
+      _.merge({}, { src: files }, options.spritesmithOptions),
+      (err, result) => {
+        if (err) {
+          throw err;
+        }
+        const spritesheetTemplatesData = spriteSheetFormat(result, options);
+        // write the sprite image file and stylesheet
+        Promise.all([
+          writeFileR(target.image, result.image, 'binary'),
+          writeCss(target.css, spritesheetTemplatesData),
+        ]).then(() => {
+          resolve();
+        });
       }
-      const spritesheetTemplatesData = spriteSheetFormat(result, options);
-      // write the sprite image file and stylesheet
-      Promise.all([
-        writeFileR(target.image, result.image, 'binary'),
-        writeCss(target.css, spritesheetTemplatesData),
-      ]);
-    }
-  );
+    );
+  })
 };
 
 function getSpritesForSpritesheetTemplates(
@@ -155,9 +159,9 @@ const compileRetina = async (files, options) => {
   ]);
 };
 
-const compile = (files, options, useRetina = false) => {
+const compile = async (files, options, useRetina = false) => {
   let compileStrategy = useRetina ? compileRetina : compileNormal;
-  compileStrategy(files, options);
+  await compileStrategy(files, options);
 };
 
 export default compile;

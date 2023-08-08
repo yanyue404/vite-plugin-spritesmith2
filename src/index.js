@@ -4,22 +4,25 @@ import path from 'path';
 import compile from './lib/compile';
 import processOptions from './lib/processOption';
 
-const handler = (customOptions) => {
+const handler = async (customOptions) => {
   const options = processOptions(customOptions);
   const { src, watch } = options;
   const init = () => {
-    glob(path.join(src.cwd, src.glob), (err, files) => {
-      if (err) {
-        throw err;
-      }
-      compile(
-        files,
-        options,
-        'retina' in options
-      );
-    });
+    return new Promise(resolve => {
+      glob(path.join(src.cwd, src.glob), (err, files) => {
+        if (err) {
+          throw err;
+        }
+        compile(
+          files,
+          options,
+          'retina' in options
+        ).then(resolve);
+      });
+    })
+
   };
-  init();
+  await init();
   if (watch) {
     gaze(src.glob, { cwd: src.cwd }, (err, watcher) => {
       watcher.on('all', init);
@@ -42,8 +45,10 @@ const handler = (customOptions) => {
 const spritesmith = (customOptions) => {
   return {
     name: 'vite:spritesmith',
-    buildStart() {
-      handler(customOptions);
+    async buildStart() {
+      console.log('vite:spritesmith buildStart ');
+      await handler(customOptions);
+      console.log('vite:spritesmith buildStart end');
     },
   };
 };
