@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "dev:retina": "vite --config vite.config.retina.js",
     "build": "vite build",
     "serve": "vite preview"
   },
@@ -16,6 +17,6 @@
     "del": "^6.0.0",
     "sass": "^1.34.0",
     "vite": "^2.3.4",
-    "vite-plugin-spritesmith": "^0.0.2"
+    "vite-plugin-spritesmith2": "^0.1.4"
   }
 }

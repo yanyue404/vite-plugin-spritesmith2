@@ -14,7 +14,6 @@ yarn add -D vite-plugin-spritesmith2
 npm install --save-dev vite-plugin-spritesmith2
 ```
 
-
 ## Example
 
 Let's say you have the following folder structure
@@ -38,7 +37,7 @@ Then you need to instantiate the plugin in the vite config like this:
 
 ```javascript
 import { defineConfig } from 'vite';
-import Spritesmith from '@vitejs/plugin-spritesmith2';
+import Spritesmith from 'vite-plugin-spritesmith2';
 export default defineConfig({
   plugins: [
     Spritesmith({
@@ -48,10 +47,10 @@ export default defineConfig({
         glob: '*.png',
       },
       target: {
-        image: './src/assets/target/spri·te.png',
+        image: './src/sprite/img/sprite.png',
         css: [
           [
-            './src/assets/style/sprite.scss',
+            './src/sprite/style/sprite.scss',
             {
               format: 'handlebars_based_template',
             },
@@ -66,7 +65,7 @@ export default defineConfig({
         },
       },
       customTemplates: {
-        handlebars_based_template: './src/scss.handlebars',
+        handlebars_based_template: './src/sprite/scss.handlebars',
       },
     }),
   ],
@@ -76,7 +75,7 @@ export default defineConfig({
 And then just use it
 
 ```scss
-@import './assets/style/sprite.scss';
+@import './assets/sprite/style/sprite.scss';
 .icon {
   @include sprites($spritesheet-sprites);
 }
@@ -85,11 +84,12 @@ And then just use it
 So the way generated image is accessed from the generated API now must be specified manually.
 
 ## Config
+
 - `watch` - should watch source images change or not, default `false`
 - `src` - used to build a list of source images
 
   - `cwd` should be the closest common directory for all source images;
-  - `glob` path pattern of source images 
+  - `glob` path pattern of source images
 
   `cwd` and `glob` both will be passed directly to [glob](https://github.com/isaacs/node-glob) (and [gaze](https://github.com/shama/gaze)
   in watch mode), then the resulting list of files will be used as a list of source images
@@ -152,6 +152,55 @@ So the way generated image is accessed from the generated API now must be specif
   Template description can be either a `path/to/handlebars/template/file` or a template function
 
   You can use templates registered here as `format` in "target.css"
+
+  For example you can write something like this
+
+```js
+  var templateFunction = function (data) {
+    var shared = '.ico { background-image: url(I) }'.replace(
+      'I',
+      data.sprites[0].image
+    );
+
+    var perSprite = data.sprites
+      .map(function (sprite) {
+        return '.ico-N { width: Wpx; height: Hpx; background-position: Xpx Ypx; }'
+          .replace('N', sprite.name)
+          .replace('W', sprite.width)
+          .replace('H', sprite.height)
+          .replace('X', sprite.offset_x)
+          .replace('Y', sprite.offset_y);
+      })
+      .join('\n');
+
+    return shared + '\n' + perSprite;
+  };
+
+module.exports = {
+    ...
+    plugins: [
+        new SpritesmithPlugin({
+            target: {
+                ...
+                css: [
+                    [path.resolve(__dirname, 'src/spritesmith-generated/sprite-1.css'), {
+                        format: 'function_based_template'
+                    }],
+                    [path.resolve(__dirname, 'src/spritesmith-generated/sprite-2.css'), {
+                        format: 'handlebars_based_template'
+                    }]
+                ]
+            },
+            customTemplates: {
+                'function_based_template': templateFunction,
+                'handlebars_based_template': path.resolve(__dirname, '../my_handlebars_template.handlebars')
+            },
+            ...
+        })
+    ]
+}
+
+```
 
 ## License
 
